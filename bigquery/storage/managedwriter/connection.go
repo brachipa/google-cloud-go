@@ -443,9 +443,9 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		return co.arc, co.pending, nil
 	}
 	// We need to (re)open a connection.  Cleanup previous connection, channel, and context if they are present.
-	if co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil) {
-		(*co.arc).CloseSend()
-	}
+	//if co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil) {
+	//	(*co.arc).CloseSend()
+	//}
 	if co.pending != nil {
 		close(co.pending)
 	}
