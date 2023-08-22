@@ -451,7 +451,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 	}
 	if co.cancel != nil {
 		//co.cancel()
-		//co.ctx, co.cancel = context.WithCancel(co.pool.ctx)
+		co.ctx, co.cancel = context.WithCancel(co.pool.ctx)
 	}
 
 	co.arc = new(storagepb.BigQueryWrite_AppendRowsClient)
