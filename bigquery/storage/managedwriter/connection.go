@@ -394,9 +394,8 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		// No optimizer present, send a fully populated request.
 		err = (*arc).Send(pw.constructFullRequest(true))
 	}
-	fmt.Printf("HI")
 	if err != nil {
-		fmt.Printf("failed to get a conn %s", err)
+		fmt.Printf("failed to get a conn reconnecting %s", err)
 		if shouldReconnect(err) {
 			// if we think this connection is unhealthy, force a reconnect on the next send.
 			co.reconnect = true
@@ -441,7 +440,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		co.reconnect = false
 	}
 	// Always return the retained ARC if the arg differs.
-	if arc != co.arc && !forceReconnect {
+	if co.arc != nil && !forceReconnect {
 		return co.arc, co.pending, nil
 	}
 	// We need to (re)open a connection.  Cleanup previous connection, channel, and context if they are present.
