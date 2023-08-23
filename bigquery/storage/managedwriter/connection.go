@@ -395,7 +395,7 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		err = (*arc).Send(pw.constructFullRequest(true))
 	}
 	if err != nil {
-		fmt.Printf("failed to get a conn reconnecting %s", err)
+		fmt.Printf("failed to get a conn reconnecting %s\n", err)
 		if shouldReconnect(err) {
 			// if we think this connection is unhealthy, force a reconnect on the next send.
 			co.reconnect = true
