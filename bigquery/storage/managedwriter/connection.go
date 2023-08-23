@@ -18,6 +18,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"google.golang.org/appengine/log"
 	"io"
 	"sync"
 
@@ -395,6 +396,7 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		err = (*arc).Send(pw.constructFullRequest(true))
 	}
 	if err != nil {
+		log.Errorf(pw.reqCtx, "failed to get a conn %s", err)
 		if shouldReconnect(err) {
 			// if we think this connection is unhealthy, force a reconnect on the next send.
 			co.reconnect = true
