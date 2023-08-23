@@ -394,6 +394,7 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		// No optimizer present, send a fully populated request.
 		err = (*arc).Send(pw.constructFullRequest(true))
 	}
+	fmt.Printf("HI")
 	if err != nil {
 		fmt.Printf("failed to get a conn %s", err)
 		if shouldReconnect(err) {
