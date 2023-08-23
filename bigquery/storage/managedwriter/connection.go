@@ -372,9 +372,9 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		if co.optimizer == nil {
 			forceReconnect = true
 		} else {
-			if !co.optimizer.isMultiplexing() {
-				forceReconnect = true
-			}
+			//if !co.optimizer.isMultiplexing() {
+			//	forceReconnect = true
+			//}
 		}
 	}
 
@@ -440,7 +440,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		co.reconnect = false
 	}
 	// Always return the retained ARC if the arg differs.
-	if co.arc != nil && !forceReconnect {
+	if arc != co.arc && !forceReconnect {
 		return co.arc, co.pending, nil
 	}
 	// We need to (re)open a connection.  Cleanup previous connection, channel, and context if they are present.
