@@ -440,7 +440,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		co.reconnect = false
 	}
 	// Always return the retained ARC if the arg differs.
-	if arc != co.arc && !forceReconnect {
+	if !forceReconnect {
 		return co.arc, co.pending, nil
 	}
 	// We need to (re)open a connection.  Cleanup previous connection, channel, and context if they are present.
