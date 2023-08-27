@@ -398,7 +398,7 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		fmt.Printf("failed to get a conn reconnecting %s\n", err)
 		if shouldReconnect(err) {
 			// if we think this connection is unhealthy, force a reconnect on the next send.
-			//co.reconnect = true
+			co.reconnect = true
 		}
 		return err
 	}
