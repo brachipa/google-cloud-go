@@ -398,7 +398,7 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		fmt.Printf("failed to get a conn reconnecting %s\n", err)
 		if shouldReconnect(err) {
 			// if we think this connection is unhealthy, force a reconnect on the next send.
-			co.reconnect = true
+			//co.reconnect = true
 		}
 		return err
 	}
@@ -451,7 +451,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		close(co.pending)
 	}
 	if co.cancel != nil {
-		fmt.Printf("canceling forceReconnect %v arc != co.arc %v  or it us nill %v\n", forceReconnect, arc != co.arc, co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil))
+		fmt.Printf("canceling forceReconnect %v arc != co.arc %v  or it is not nil %v\n", forceReconnect, arc != co.arc, co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil))
 		co.cancel()
 		co.ctx, co.cancel = context.WithCancel(co.pool.ctx)
 	}
