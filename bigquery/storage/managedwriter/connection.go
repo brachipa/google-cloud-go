@@ -451,7 +451,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		close(co.pending)
 	}
 	if co.cancel != nil {
-		fmt.Printf("canceling forceReconnect %v arc != co.arc %v \n", forceReconnect, arc != co.arc)
+		fmt.Printf("canceling forceReconnect %v arc != co.arc %v  or it us nill %v\n", forceReconnect, arc != co.arc, co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil))
 		co.cancel()
 		co.ctx, co.cancel = context.WithCancel(co.pool.ctx)
 	}
