@@ -381,9 +381,9 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		if co.optimizer == nil {
 			forceReconnect = true
 		} else {
-			if !co.optimizer.isMultiplexing() {
-				forceReconnect = true
-			}
+			//if !co.optimizer.isMultiplexing() {
+			//	forceReconnect = true
+			//}
 		}
 	}
 
@@ -404,6 +404,7 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 		err = (*arc).Send(pw.constructFullRequest(true))
 	}
 	if err != nil {
+		fmt.Printf("failed to get a conn reconnecting %s\n", err)
 		if shouldReconnect(err) {
 			metricCtx := co.ctx // start with the ctx that must be present
 			if pw.writer != nil {
@@ -456,7 +457,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		co.reconnect = false
 	}
 	// Always return the retained ARC if the arg differs.
-	if arc != co.arc && !forceReconnect {
+	if co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil) && !forceReconnect {
 		return co.arc, co.pending, nil
 	}
 	// We need to (re)open a connection.  Cleanup previous connection, channel, and context if they are present.
@@ -467,6 +468,7 @@ func (co *connection) getStream(arc *storagepb.BigQueryWrite_AppendRowsClient, f
 		close(co.pending)
 	}
 	if co.cancel != nil {
+		fmt.Printf("canceling forceReconnect %v arc != co.arc %v  or it is not nil %v\n", forceReconnect, arc != co.arc, co.arc != nil && (*co.arc) != (storagepb.BigQueryWrite_AppendRowsClient)(nil))
 		co.cancel()
 		co.ctx, co.cancel = context.WithCancel(co.pool.ctx)
 	}
