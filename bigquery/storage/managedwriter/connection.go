@@ -191,7 +191,7 @@ type connection struct {
 	retry     *statelessRetryer
 	optimizer sendOptimizer
 
-	mu        sync.Mutex
+	mu        sync.RWMutex
 	arc       *storagepb.BigQueryWrite_AppendRowsClient // reference to the grpc connection (send, recv, close)
 	reconnect bool                                      //
 	err       error                                     // terminal connection error
@@ -351,9 +351,9 @@ func (co *connection) lockingAppend(pw *pendingWrite) error {
 	// * get/open conenction
 	// * issue the append
 	// * add the pending write to the channel for the connection (ordering for the response)
-	co.mu.Lock()
+	co.mu.RLock()
 	defer func() {
-		co.mu.Unlock()
+		co.mu.RUnlock()
 		if statsOnExit != nil {
 			statsOnExit()
 		}
